@@ -6,7 +6,7 @@
 }
 
 .logo {
-  height: 6em;
+  height: 12em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -16,6 +16,22 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.picture-background {
+  background-color: rgba(187, 184, 184, 0.7);
+  padding: 1rem;
+  border-radius: 1.8rem;
+}
+
+.emboss {
+  font-size: 8em;
+  color: #cb2929;
+  text-shadow:
+    1px 1px #bbb,
+    3px 3px #999,
+    -1px -1px #444,
+    -2px -2px #222;
 }
 
 @keyframes logo-spin {
