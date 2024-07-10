@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Paper } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -47,6 +48,7 @@ const auth = getAuth(app);
 //   });
 
 function FileUpload() {
+    const [isUploading, setIsUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
@@ -124,6 +126,7 @@ function FileUpload() {
     };
 
     const uploadFile = () => {
+        setIsUploading(true); // Start uploading
         const storage = getStorage();
         const storageRef = ref(storage, `files/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -135,17 +138,13 @@ function FileUpload() {
           },
           (error) => {
               console.error('Upload failed', error);
+              setIsUploading(false); // Stop uploading on error
           },
           () => {
               getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                   console.log('File available at', downloadURL);
-                  // Update the upload status upon successful upload
-                  setUploadSuccess(true);
-                  // Optionally clear the preview URL to free up memory
-                  if (previewUrl) {
-                      URL.revokeObjectURL(previewUrl);
-                      setPreviewUrl('');
-                  }
+                  setIsUploading(false); // Stop uploading on success
+                  setUploadSuccess(true); // Indicate upload success
               });
           }
         );
@@ -201,6 +200,13 @@ function FileUpload() {
                 </>
               )}
           </Paper>
+          {isUploading &&
+            <>
+                <Paper style={{ backgroundColor: "#ad4545" }}>
+                    <CircularProgress/>
+                </Paper>
+            </>
+          }
       </div>
     );
 }
