@@ -47,6 +47,7 @@ const auth = getAuth(app);
 //   });
 
 function FileUpload() {
+    const [uploadSuccess, setUploadSuccess] = useState(false);
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const fileInputRef = useRef(null);
@@ -138,6 +139,13 @@ function FileUpload() {
           () => {
               getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                   console.log('File available at', downloadURL);
+                  // Update the upload status upon successful upload
+                  setUploadSuccess(true);
+                  // Optionally clear the preview URL to free up memory
+                  if (previewUrl) {
+                      URL.revokeObjectURL(previewUrl);
+                      setPreviewUrl('');
+                  }
               });
           }
         );
@@ -161,31 +169,37 @@ function FileUpload() {
                      className="file-input"/>
           </Paper>
           <Paper style={{ backgroundColor: "#ad4545" }}>
-              {file && <span><strong>Selected file:</strong> {file.name}</span>}
-              <div className="preview-container">
-                  {previewUrl && <strong><img src={previewUrl} alt="No Preview Available"
-                                              style={{
-                                                  width: "20%",
-                                                  height: "20%",
-                                                  margin: "5px",
-                                                  objectFit: "cover",
-                                                  borderRadius: "10px",
-                                              }}/></strong>}
-              </div>
-              <Button onClick={handleUpload}
-                      sx={{
-                          color: "#d9bf97",
-                          backgroundColor: "#4d8cb6",
-                          transition: 'backgroundColor 0.3s',
-                          cursor: "pointer",
-                          padding: "10px",
-                          margin: "5px",
-                          border: "none",
-                          borderRadius: "10px",
-                          '&:hover': {
-                              backgroundColor: '#0c68a2',
-                          },
-                      }}>Upload to Cloud</Button>
+              {uploadSuccess ? (
+                <span><strong>Upload successful!</strong></span>
+              ) : (
+                <>
+                    {file && <span><strong>Selected file:</strong> {file.name}</span>}
+                    <div className="preview-container">
+                        {previewUrl && <img src={previewUrl} alt="No Preview Available"
+                                            style={{
+                                                width: "20%",
+                                                height: "20%",
+                                                margin: "5px",
+                                                objectFit: "cover",
+                                                borderRadius: "10px",
+                                            }}/>}
+                    </div>
+                    <Button onClick={handleUpload}
+                            sx={{
+                                color: "#d9bf97",
+                                backgroundColor: "#4d8cb6",
+                                transition: 'backgroundColor 0.3s',
+                                cursor: "pointer",
+                                padding: "10px",
+                                margin: "5px",
+                                border: "none",
+                                borderRadius: "10px",
+                                '&:hover': {
+                                    backgroundColor: '#0c68a2',
+                                },
+                            }}>Upload to Cloud</Button>
+                </>
+              )}
           </Paper>
       </div>
     );
