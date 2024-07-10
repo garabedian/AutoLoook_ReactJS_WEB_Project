@@ -201,11 +201,16 @@ function FileUpload() {
               )}
           </Paper>
           {isUploading &&
-            <>
-                <Paper style={{ backgroundColor: "#ad4545" }}>
-                    <CircularProgress/>
-                </Paper>
-            </>
+            <Paper style={{
+                backgroundColor: "#ad4545",
+                padding: "20px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+                <CircularProgress
+                  style={{ padding: "20px", backgroundColor: "rgba(255, 255, 255, 0.8)", borderRadius: "50%" }}/>
+            </Paper>
           }
       </div>
     );
