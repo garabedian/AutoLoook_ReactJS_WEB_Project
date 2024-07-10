@@ -1,4 +1,5 @@
 import projectLogo from "../assets/images/seat.png";
+import FileUpload from "./fileupload.jsx";
 
 export default function Landing() {
     return (
@@ -9,6 +10,7 @@ export default function Landing() {
               </a>
           </div>
           <h1 className="emboss">Auto Loook</h1>
+          <FileUpload />
       </>
     )
 }

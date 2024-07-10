@@ -1,0 +1,20 @@
+.paperOne {
+    background-color: #b97c7c;
+}
+
+.paperTwo {
+    background-color: #884c4c;
+}
+
+.paperThree {
+    background-color: #502929;
+}
+
+.uploadButton {
+    background-color: #8a6767;
+    transition: background-color 0.3s ease;
+}
+
+.uploadButton:hover {
+    background-color: #1d608f;
+}
