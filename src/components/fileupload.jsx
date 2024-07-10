@@ -152,7 +152,7 @@ function FileUpload() {
                           padding: "10px",
                           backgroundColor: "lightblue",
                           color: "purple",
-                          border: "none",
+                          margin: "5px",
                           borderRadius: "10px",
                       }}>Choose a file
               </button>
