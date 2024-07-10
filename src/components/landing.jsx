@@ -1,4 +1,4 @@
-import projectLogo from "../assets/images/seat.png";
+import projectLogo from "/images/seat.png";
 import FileUpload from "./fileupload.jsx";
 
 export default function Landing() {
