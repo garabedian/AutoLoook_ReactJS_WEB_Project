@@ -110,6 +110,7 @@ function FileUpload() {
             // For simplicity, this example will use signInWithEmailAndPassword
             signInWithEmailAndPassword(auth, 'takvor@abv.bg', 'takvor')
               .then((userCredential) => {
+                  console.log('Authentication successful', userCredential);
                   // Proceed with the upload after successful login
                   uploadFile();
               })
