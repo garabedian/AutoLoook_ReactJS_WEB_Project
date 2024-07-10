@@ -1,20 +1,15 @@
-.paperOne {
-    background-color: #b97c7c;
+
+.custom-file-upload {
+  cursor: pointer;
+  padding: 10px;
+  background-color: #4d8cb6;
+  color: white;
+  border: none;
+  border-radius: 5px;
 }
 
-.paperTwo {
-    background-color: #884c4c;
-}
-
-.paperThree {
-    background-color: #502929;
-}
-
-.uploadButton {
-    background-color: #8a6767;
-    transition: background-color 0.3s ease;
-}
-
-.uploadButton:hover {
-    background-color: #1d608f;
+.preview-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px
 }

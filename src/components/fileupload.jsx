@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './fileupload.module.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { initializeApp } from "firebase/app";
-import { getAuth,  signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Paper } from "@mui/material";
 
 // Your web app's Firebase configuration
@@ -48,11 +48,31 @@ const auth = getAuth(app);
 
 function FileUpload() {
     const [file, setFile] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState('');
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        // Cleanup preview URL
+        return () => {
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+            }
+        };
+    }, [previewUrl]);
+
 
     const handleChange = (e) => {
-        setFile(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file) {
+            setFile(file);
+            const previewUrl = URL.createObjectURL(file);
+            setPreviewUrl(previewUrl);
+        }
     };
 
+    const handleButtonClick = () => {
+        fileInputRef.current.click();
+    };
 
     // // This function will upload the file to Firebase Storage w/o checking for authentication
     // const handleUpload = () => {
@@ -124,15 +144,43 @@ function FileUpload() {
 
     return (
       <div>
-          <Paper style={{ backgroundColor: "#d39494" }}>File Upload to Firebase Storage</Paper>
-          <Paper style={{ backgroundColor: "#c46262" }}>Choose a file to upload</Paper>
+          <Paper style={{ backgroundColor: "#d39494" }}><span><b>File Upload to Firebase Storage</b></span></Paper>
+          <Paper style={{ backgroundColor: "#c46262" }}>
+              <button onClick={handleButtonClick}
+                      style={{
+                          cursor: "pointer",
+                          padding: "10px",
+                          backgroundColor: "lightblue",
+                          color: "purple",
+                          border: "none",
+                          borderRadius: "10px",
+                      }}>Choose a file
+              </button>
+              <input style={{ display: "none" }} type="file" onChange={handleChange} ref={fileInputRef}
+                     className="file-input"/>
+          </Paper>
           <Paper style={{ backgroundColor: "#ad4545" }}>
-              <input type="file" onChange={handleChange}/>
+              {file && <span><strong>Selected file:</strong> {file.name}</span>}
+              <div className="preview-container">
+                  {previewUrl && <strong><img src={previewUrl} alt="No Preview Available"
+                                              style={{
+                                                  width: "20%",
+                                                  height: "20%",
+                                                  margin: "5px",
+                                                  objectFit: "cover",
+                                                  borderRadius: "10px",
+                                              }}/></strong>}
+              </div>
               <Button onClick={handleUpload}
                       sx={{
                           color: "#d9bf97",
                           backgroundColor: "#4d8cb6",
                           transition: 'backgroundColor 0.3s',
+                          cursor: "pointer",
+                          padding: "10px",
+                          margin: "5px",
+                          border: "none",
+                          borderRadius: "10px",
                           '&:hover': {
                               backgroundColor: '#0c68a2',
                           },
