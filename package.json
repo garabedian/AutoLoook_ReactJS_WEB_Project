@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://garabedian.github.io/AutoLoook_ReactJS_WEB_Project",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
