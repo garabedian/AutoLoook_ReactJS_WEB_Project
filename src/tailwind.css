@@ -1,0 +1,11 @@
+/*
+    tailwind.css
+    use it by importing it in components by
+    import '../tailwind.css';
+*/
+
+@config "../tailwind.config.js";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
