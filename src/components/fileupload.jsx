@@ -151,7 +151,7 @@ function FileUpload() {
     };
 
     return (
-      <div>
+      <div className="animate__animated animate__bounceInUp">
           <Paper style={{ backgroundColor: "#d39494" }}><span><b>File Upload to Firebase Storage</b></span></Paper>
           <Paper style={{ backgroundColor: "#c46262" }}>
               <button onClick={handleButtonClick}

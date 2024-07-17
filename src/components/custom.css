@@ -1,0 +1,45 @@
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.vertical-center {
+    margin: 0;
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.evenly-distributed-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+}
+
+#refer_to {
+    cursor: pointer;
+    margin: 15px 0;
+}
+
+#accordion {
+    border: 2px solid #cdc7c7;
+    display: inline-block;
+    width: 100%;
+    font-size: 1.3rem;
+}
+
+#extra {
+    display: none;
+}
