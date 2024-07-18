@@ -6,9 +6,9 @@ export default function MainContent({ isAuthenticated }) {
     return (
       <>
           <div>
-              <a href="/#" target="_blank">
+              <button style={{ backgroundColor: "transparent", border: "none" }} onClick={() => window.location.reload()}>
                   <img src={projectLogo} className="logo picture-background animate__animated animate__bounceInDown" alt="Car logo"/>
-              </a>
+              </button>
           </div>
           <br/>
           <br/>
