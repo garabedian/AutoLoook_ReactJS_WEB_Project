@@ -27,14 +27,14 @@ export default function MainContent({ isAuthenticated }) {
                     <div className="inner cover animate__animated animate__zoomInUp">
                         <Row>
                             <Col lg={6}>
-                                <p className="lead" style={{ color: "pink" }}>Registered user? <br/><Link
-                                  to="/AutoLoook_ReactJS_WEB_Project/login" className="btn btn-lg btn-secondary">sign
-                                    in</Link></p>
-                            </Col>
-                            <Col lg={6}>
                                 <p className="lead" style={{ color: "pink" }}>Welcome, guest!<br/><Link
                                   to="/AutoLoook_ReactJS_WEB_Project/register" className="btn btn-lg btn-secondary">sign
                                     up</Link></p>
+                            </Col>
+                            <Col lg={6}>
+                                <p className="lead" style={{ color: "pink" }}>Registered user? <br/><Link
+                                  to="/AutoLoook_ReactJS_WEB_Project/login" className="btn btn-lg btn-secondary">sign
+                                    in</Link></p>
                             </Col>
                         </Row>
                     </div>
