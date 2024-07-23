@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import './fileupload.module.css';
+import './file-upload.module.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Paper } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgressWithLabel from './linear-progres-with-label.jsx';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -52,6 +52,7 @@ function FileUpload() {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
+    const [progress, setProgress] = useState(0);
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -133,8 +134,9 @@ function FileUpload() {
 
         uploadTask.on('state_changed',
           (snapshot) => {
-              const progress = ( snapshot.bytesTransferred / snapshot.totalBytes ) * 100;
-              console.log('Upload is ' + progress + '% done');
+              const bytesProgress = ( snapshot.bytesTransferred / snapshot.totalBytes ) * 100;
+              setProgress( bytesProgress); // Update progress bar
+              console.log('Upload is ' + bytesProgress + '% done');
           },
           (error) => {
               console.error('Upload failed', error);
@@ -208,8 +210,7 @@ function FileUpload() {
                 justifyContent: "center",
                 alignItems: "center"
             }}>
-                <CircularProgress
-                  style={{ padding: "20px", backgroundColor: "rgba(255, 255, 255, 0.8)", borderRadius: "50%" }}/>
+                <CircularProgressWithLabel value={progress} />
             </Paper>
           }
       </div>

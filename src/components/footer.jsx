@@ -36,7 +36,7 @@ const Footer = ({ showImage, setShowImage }) => {
                     by Takvor M. Garabedian - created July 2024&nbsp;&nbsp;&nbsp;
                 </small>
                 <small className="text-light text-center">
-                    <Link to="/contact-us" style={{ color: '#f5deb3' }}>
+                    <Link to="/AutoLoook_ReactJS_WEB_Project/contact-us" style={{ color: '#f5deb3' }}>
                         Contact us
                     </Link>
                 </small>
