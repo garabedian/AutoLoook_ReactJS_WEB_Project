@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import './file-upload.module.css';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Button, Paper } from "@mui/material";
+import { UserContext } from '../contexts/user-context.jsx';
 import CircularProgressWithLabel from './linear-progres-with-label.jsx';
 
 // Your web app's Firebase configuration
@@ -54,6 +55,7 @@ function FileUpload() {
     const [previewUrl, setPreviewUrl] = useState('');
     const [progress, setProgress] = useState(0);
     const fileInputRef = useRef(null);
+    const { setUser } = useContext(UserContext);
 
     useEffect(() => {
         // Cleanup preview URL
@@ -115,6 +117,7 @@ function FileUpload() {
             signInWithEmailAndPassword(auth, 'takvor@abv.bg', 'takvor')
               .then((userCredential) => {
                   console.log('Authentication successful', userCredential);
+                  setUser(userCredential.user); // Set the user to the authenticated user
                   // Proceed with the upload after successful login
                   uploadFile();
               })

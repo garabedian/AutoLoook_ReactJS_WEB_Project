@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Backendless from '../backendless';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/user-context.jsx';
 
 
 const Login = () => {
@@ -8,12 +9,15 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await Backendless.UserService.login(email, password, true);
-      navigate('/'); // Redirect to home page after successful login
+      const currentUser = await Backendless.UserService.getCurrentUser();
+      setUser(currentUser);
+      navigate('/AutoLoook_ReactJS_WEB_Project');
     } catch (err) {
       setError(err.message);
     }

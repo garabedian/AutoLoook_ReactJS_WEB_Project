@@ -57,3 +57,8 @@
 .nav-right {
     margin-left: auto;
 }
+
+.nav-center-vertical {
+    display: flex;
+    align-items: center;
+}
