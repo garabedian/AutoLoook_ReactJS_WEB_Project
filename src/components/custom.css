@@ -1,10 +1,10 @@
 .center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .vertical-center {
@@ -42,4 +42,18 @@
 
 #extra {
     display: none;
+}
+
+.custom-navbar {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.semi-transparent-footer {
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.nav-right {
+    margin-left: auto;
 }
