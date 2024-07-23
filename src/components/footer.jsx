@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './custom.css';
+import projectSound from '/sounds/Bolero.mp3';
 
 const Footer = ({ showImage, setShowImage }) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -41,7 +42,7 @@ const Footer = ({ showImage, setShowImage }) => {
                 </small>
             </div>
             <div className="text-right" style={{ display: 'inline', float: 'right', paddingRight: '2px' }}>
-                <audio hidden src="AutoLoook_ReactJS_WEB_Project/public/sounds/Bolero.mp3" datatype="audio/mp3" loop id="background_audio"></audio>
+                <audio hidden src={projectSound} datatype="audio/mp3" loop id="background_audio"></audio>
                 <button className="btn btn-outline-info btn-sm" onClick={togglePlay}>
                     Background music
                 </button>

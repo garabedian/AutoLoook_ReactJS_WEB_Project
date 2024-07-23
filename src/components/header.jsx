@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.css';
+import projectLogo from "/images/car.png";
 
 const Header = ({ isAuthenticated, user }) => {
     return (
       <Navbar className="custom-navbar" variant="dark" expand="lg" fixed="top" style={{ marginBottom: '2%' }}>
           <Navbar.Toggle aria-controls="navbarNavDropdown"/>
           <Navbar.Brand href="/">
-              <Image src="AutoLoook_ReactJS_WEB_Project/images/car.png" style={{ height: '40px', width: '40px' }}
+              <Image src={projectLogo} style={{ height: '40px', width: '40px' }}
                      alt="Car logo"/>
               <span style={{ color: 'wheat', marginLeft: '10px' }}>Auto Loook</span>
           </Navbar.Brand>

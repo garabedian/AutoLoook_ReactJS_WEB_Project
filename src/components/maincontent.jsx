@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import projectLogo from "/images/seat.png";
+import photoSeat from "/images/seat.png";
 
 export default function MainContent({ isAuthenticated }) {
     return (
@@ -8,7 +8,7 @@ export default function MainContent({ isAuthenticated }) {
           <div>
               <button style={{ backgroundColor: "transparent", border: "none" }}
                       onClick={() => window.location.reload()}>
-                  <img src={projectLogo} className="logo picture-background animate__animated animate__bounceInDown"
+                  <img src={photoSeat} className="logo picture-background animate__animated animate__bounceInDown"
                        alt="Car logo"/>
               </button>
           </div>
