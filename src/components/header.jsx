@@ -19,7 +19,7 @@ const Header = () => {
     return (
       <Navbar className="custom-navbar" variant="dark" expand="lg" fixed="top" style={{ marginBottom: '2%' }}>
           <Navbar.Toggle aria-controls="navbarNavDropdown"/>
-          <Navbar.Brand href="/">
+          <Navbar.Brand as={Link} to="/AutoLoook_ReactJS_WEB_Project">
               <Image src={projectLogo} style={{ height: '40px', width: '40px' }} alt="Car logo"/>
               <span style={{ color: 'wheat', marginLeft: '10px' }}>Auto Loook</span>
           </Navbar.Brand>

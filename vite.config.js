@@ -5,4 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
     plugins: [react()],
     base: "/AutoLoook_ReactJS_WEB_Project",
+    build: { chunkSizeWarningLimit: 1600, },
 })
