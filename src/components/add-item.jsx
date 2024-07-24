@@ -13,6 +13,7 @@ const AddItem = () => {
   const [comments, setComments] = useState('');
   const [photoURL, setPhotoURL] = useState(''); // Add state for photoURL
   const [error, setError] = useState('');
+  const [isUploadComplete, setIsUploadComplete] = useState(false); // Track upload completion
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,13 +23,18 @@ const AddItem = () => {
       return;
     }
 
+    if (!isUploadComplete) {
+      setError('Please wait for the file upload to complete.');
+      return;
+    }
+
     const vehicle = {
       make,
       model,
       production_year: parseInt(productionYear, 10),
       likes: parseInt(likes, 10),
       comments,
-      photoURL, // Include photoURL in the vehicle object
+      photoURL,
     };
 
     try {
@@ -76,7 +82,7 @@ const AddItem = () => {
           value={comments}
           onChange={(e) => setComments(e.target.value)}
         />
-        <FileUpload setPhotoURL={setPhotoURL} /> {/* Add FileUpload component */}
+        <FileUpload setPhotoURL={setPhotoURL} onUploadComplete={() => setIsUploadComplete(true)} /> {/* Add FileUpload component */}
         <button type="submit">Add Vehicle</button>
       </form>
     </div>
