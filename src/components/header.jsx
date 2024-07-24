@@ -7,14 +7,8 @@ import projectLogo from "/images/car.png";
 import { UserContext } from '../contexts/user-context.jsx';
 import userAvatar from '/images/user.png';
 
-const Header = () => {
-    const { user, logout } = useContext(UserContext);
-    const navigate = useNavigate();
-
-    const handleLogout = async () => {
-        await logout();
-        navigate('/AutoLoook_ReactJS_WEB_Project');
-    };
+const Header = ({ handleLogout }) => {
+    const { user } = useContext(UserContext);
 
     return (
       <Navbar className="custom-navbar" variant="dark" expand="lg" fixed="top" style={{ marginBottom: '2%' }}>
@@ -27,20 +21,26 @@ const Header = () => {
               <Nav className="mr-auto">
                   <Nav.Link as={Link} to="/AutoLoook_ReactJS_WEB_Project">Home</Nav.Link>
                   <Nav.Link as={Link} to="/AutoLoook_ReactJS_WEB_Project/list-items">All vehicles</Nav.Link>
-                  <Nav.Link as={Link} to="/AutoLoook_ReactJS_WEB_Project/create-item">Add vehicle</Nav.Link>
-                  <Nav className="nav-center">
-                      <Nav.Link as={Link} to="/AutoLoook_ReactJS_WEB_Project/file-upload">File upload</Nav.Link>
-                  </Nav>
+                  {user && (
+                    <Nav.Link as={Link} to="/AutoLoook_ReactJS_WEB_Project/create-item">Add vehicle</Nav.Link>
+                  )}
+                  {/*<Nav className="nav-center">*/}
+                  {/*    <Nav.Link as={Link} to="/AutoLoook_ReactJS_WEB_Project/file-upload">File upload</Nav.Link>*/}
+                  {/*</Nav>*/}
               </Nav>
               <Nav className="nav-right nav-center-vertical">
                   {user ? (
                     <>
                         <Nav.Link as={Link} to={`/AutoLoook_ReactJS_WEB_Project/user-profile/${user.uid}`}>
                             <Image
-                              src={ "https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2FTakvor_XxX.png?alt=media&token=ec577271-080c-4de3-ac6b-2f24d347c936"
-                                || userAvatar }
+                              src={user.photoURL || userAvatar}
                               roundedCircle
-                              style={{ width: '40px', height: '40px', verticalAlign: 'middle', backgroundColor: 'grey'}}
+                              style={{
+                                  width: '40px',
+                                  height: '40px',
+                                  verticalAlign: 'middle',
+                                  backgroundColor: 'grey'
+                              }}
                               alt="Avatar"
                             />
                         </Nav.Link>

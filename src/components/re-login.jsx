@@ -1,22 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Backendless from '../backendless';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/user-context.jsx';
+import { updateUserToken } from '../utils/token-utils.js';
 
-
-const Login = () => {
+const Relogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
 
-  const handleLogin = async (e) => {
+  const handleRelogin = async (e) => {
     e.preventDefault();
     try {
-      await Backendless.UserService.login(email, password, true);
-      const currentUser = await Backendless.UserService.getCurrentUser();
-      setUser(currentUser);
+      await updateUserToken(email, password);
       navigate('/AutoLoook_ReactJS_WEB_Project');
     } catch (err) {
       setError(err.message);
@@ -24,11 +20,11 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="relogin-container">
       <h2 className="emboss display-3
-           text-center animate__animated animate__bounceInRight">Login</h2>
+           text-center animate__animated animate__bounceInRight">Re-login</h2>
       {error && <p className="error">{error}</p>}
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleRelogin}>
         <input
           type="email"
           placeholder="Email"
@@ -43,10 +39,10 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit">Re-login</button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Relogin;

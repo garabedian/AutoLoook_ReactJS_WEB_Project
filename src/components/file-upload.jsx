@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import './file-upload.module.css';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, getMetadata, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { Button, Paper } from "@mui/material";
+import { getAuth } from "firebase/auth";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper } from "@mui/material";
 import { UserContext } from '../contexts/user-context.jsx';
 import CircularProgressWithLabel from './linear-progres-with-label.jsx';
 
@@ -22,40 +22,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// // Sign up new users
-// auth.createUserWithEmailAndPassword(email, password)
-//   .then((userCredential) => {
-//     // Signed in
-//     var user = userCredential.user;
-//     console.log(user);
-//   })
-//   .catch((error) => {
-//     var errorCode = error.code;
-//     var errorMessage = error.message;
-//     console.error(errorCode, errorMessage);
-//   });
-//
-// // Sign in existing users
-// auth.signInWithEmailAndPassword(email, password)
-//   .then((userCredential) => {
-//     // Signed in
-//     var user = userCredential.user;
-//     console.log(user);
-//   })
-//   .catch((error) => {
-//     var errorCode = error.code;
-//     var errorMessage = error.message;
-//     console.error(errorCode, errorMessage);
-//   });
-
-function FileUpload() {
+function FileUpload({ setPhotoURL, onUploadComplete, allowUnauthenticated = false }) {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [progress, setProgress] = useState(0);
+    const [fileExists, setFileExists] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
     const fileInputRef = useRef(null);
-    const { setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         // Cleanup preview URL
@@ -65,7 +41,6 @@ function FileUpload() {
             }
         };
     }, [previewUrl]);
-
 
     const handleChange = (e) => {
         const file = e.target.files[0];
@@ -80,53 +55,26 @@ function FileUpload() {
         fileInputRef.current.click();
     };
 
-    // // This function will upload the file to Firebase Storage w/o checking for authentication
-    // const handleUpload = () => {
-    //     if (!file) return;
-    //     uploadFile(); // Directly call uploadFile without checking for authentication
-    // };
-    //
-    // const uploadFile = () => {
-    //     const storage = getStorage();
-    //     const storageRef = ref(storage, `files/${file.name}`);
-    //     const uploadTask = uploadBytesResumable(storageRef, file);
-    //
-    //     uploadTask.on('state_changed',
-    //       (snapshot) => {
-    //           const progress = ( snapshot.bytesTransferred / snapshot.totalBytes ) * 100;
-    //           console.log('Upload is ' + progress + '% done');
-    //       },
-    //       (error) => {
-    //           console.error('Upload failed', error);
-    //       },
-    //       () => {
-    //           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //               console.log('File available at', downloadURL);
-    //           });
-    //       }
-    //     );
-    // };
-
-    // This function will check for authentication before uploading the file to Firebase Storage
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (!file) return;
-        if (!auth.currentUser) {
+        if (!user && !allowUnauthenticated) {
             console.log('No authenticated user. Please log in.');
-            // Here, you could call a login function or show a login form
-            // For simplicity, this example will use signInWithEmailAndPassword
-            signInWithEmailAndPassword(auth, 'takvor@abv.bg', 'takvor')
-              .then((userCredential) => {
-                  console.log('Authentication successful', userCredential);
-                  setUser(userCredential.user); // Set the user to the authenticated user
-                  // Proceed with the upload after successful login
-                  uploadFile();
-              })
-              .catch((error) => {
-                  console.error('Authentication failed', error);
-              });
-        } else {
-            uploadFile();
+            return;
         }
+        await checkFileExists();
+    };
+
+    const checkFileExists = () => {
+        const storage = getStorage();
+        const storageRef = ref(storage, `files/${file.name}`);
+        getMetadata(storageRef)
+          .then(() => {
+              setFileExists(true);
+              setOpenDialog(true);
+          })
+          .catch(() => {
+              uploadFile();
+          });
     };
 
     const uploadFile = () => {
@@ -138,7 +86,7 @@ function FileUpload() {
         uploadTask.on('state_changed',
           (snapshot) => {
               const bytesProgress = ( snapshot.bytesTransferred / snapshot.totalBytes ) * 100;
-              setProgress( bytesProgress); // Update progress bar
+              setProgress(bytesProgress); // Update progress bar
               console.log('Upload is ' + bytesProgress + '% done');
           },
           (error) => {
@@ -150,28 +98,40 @@ function FileUpload() {
                   console.log('File available at', downloadURL);
                   setIsUploading(false); // Stop uploading on success
                   setUploadSuccess(true); // Indicate upload success
+                  setPhotoURL(downloadURL); // Set the photo URL in the parent component
+                  onUploadComplete(); // Notify parent component
               });
           }
         );
     };
 
+    const handleDialogClose = (action) => {
+        setOpenDialog(false);
+        if (action === 'tryAgain') {
+            setFile(null);
+            setPreviewUrl('');
+        }
+    };
+
     return (
       <div className="animate__animated animate__bounceInUp">
           <Paper style={{ backgroundColor: "#d39494" }}><span><b>File Upload to Firebase Storage</b></span></Paper>
-          <Paper style={{ backgroundColor: "#c46262" }}>
-              <button onClick={handleButtonClick}
-                      style={{
-                          cursor: "pointer",
-                          padding: "10px",
-                          backgroundColor: "lightblue",
-                          color: "purple",
-                          margin: "5px",
-                          borderRadius: "10px",
-                      }}>Choose a file
-              </button>
-              <input style={{ display: "none" }} type="file" onChange={handleChange} ref={fileInputRef}
-                     className="file-input"/>
-          </Paper>
+          {!uploadSuccess &&
+            <Paper style={{ backgroundColor: "#c46262" }}>
+                <button onClick={handleButtonClick}
+                        style={{
+                            cursor: "pointer",
+                            padding: "10px",
+                            backgroundColor: "lightblue",
+                            color: "purple",
+                            margin: "5px",
+                            borderRadius: "10px",
+                        }}>Choose a file
+                </button>
+                <input style={{ display: "none" }} type="file" onChange={handleChange} ref={fileInputRef}
+                       className="file-input"/>
+            </Paper>
+          }
           <Paper style={{ backgroundColor: "#ad4545" }}>
               {uploadSuccess ? (
                 <span><strong>Upload successful!</strong></span>
@@ -213,9 +173,26 @@ function FileUpload() {
                 justifyContent: "center",
                 alignItems: "center"
             }}>
-                <CircularProgressWithLabel value={progress} />
+                <CircularProgressWithLabel value={progress}/>
             </Paper>
           }
+          <Dialog open={openDialog} onClose={() => handleDialogClose('continue')}>
+              <DialogTitle>File Already Exists</DialogTitle>
+              <DialogContent>
+                  <DialogContentText>
+                      The file you are trying to upload already exists. Would you like to try uploading a different file
+                      or continue without uploading?
+                  </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                  <Button onClick={() => handleDialogClose('tryAgain')} color="primary">
+                      Try Again
+                  </Button>
+                  <Button onClick={() => handleDialogClose('continue')} color="primary" autoFocus>
+                      Continue
+                  </Button>
+              </DialogActions>
+          </Dialog>
       </div>
     );
 }
