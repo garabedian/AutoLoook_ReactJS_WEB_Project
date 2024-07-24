@@ -12,7 +12,7 @@ import Header from "./components/header.jsx";
 import Login from './components/login.jsx';
 import Relogin from './components/re-login.jsx';
 import Register from './components/register.jsx';
-import AddVehicle from './components/add-vehicle.jsx';
+import AddItem from './components/add-item.jsx';
 import NotYetImplemented from './components/not-yet-implemented.jsx';
 
 function App() {
@@ -56,7 +56,7 @@ function App() {
               <Route path="/AutoLoook_ReactJS_WEB_Project/file-upload" element={<FileUpload/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/re-login" element={<Relogin/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/create-item"
-                     element={user ? <AddVehicle/> : <Navigate to="/AutoLoook_ReactJS_WEB_Project/login"/>}/>
+                     element={user ? <AddItem/> : <Navigate to="/AutoLoook_ReactJS_WEB_Project/login"/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/not-yet-implemented" element={<NotYetImplemented />} />
           </Routes>}
           <Footer showImage={showImage} setShowImage={setShowImage}/>

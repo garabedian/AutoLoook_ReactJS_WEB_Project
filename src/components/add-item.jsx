@@ -4,7 +4,7 @@ import { UserContext } from '../contexts/user-context.jsx';
 import { useNavigate } from 'react-router-dom';
 import FileUpload from './file-upload.jsx'; // Import the FileUpload component
 
-const AddVehicle = () => {
+const AddItem = () => {
   const { user } = useContext(UserContext);
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
@@ -83,4 +83,4 @@ const AddVehicle = () => {
   );
 };
 
-export default AddVehicle;
+export default AddItem;
