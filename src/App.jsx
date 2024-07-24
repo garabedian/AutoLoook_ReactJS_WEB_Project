@@ -13,6 +13,7 @@ import Login from './components/login.jsx';
 import Relogin from './components/re-login.jsx';
 import Register from './components/register.jsx';
 import AddVehicle from './components/add-vehicle.jsx';
+import NotYetImplemented from './components/not-yet-implemented.jsx';
 
 function App() {
     const [showImage, setShowImage] = useState(true);
@@ -48,6 +49,7 @@ function App() {
       <>
           <Header handleLogout={handleLogout}/>
           {showImage && <Routes>
+              <Route path="/AutoLoook_ReactJS_WEB_Project/*" element={<NotYetImplemented />}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project" element={<MainContent/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/login" element={<Login/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/register" element={<Register/>}/>
@@ -55,6 +57,7 @@ function App() {
               <Route path="/AutoLoook_ReactJS_WEB_Project/re-login" element={<Relogin/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/create-item"
                      element={user ? <AddVehicle/> : <Navigate to="/AutoLoook_ReactJS_WEB_Project/login"/>}/>
+              <Route path="/AutoLoook_ReactJS_WEB_Project/not-yet-implemented" element={<NotYetImplemented />} />
           </Routes>}
           <Footer showImage={showImage} setShowImage={setShowImage}/>
       </>

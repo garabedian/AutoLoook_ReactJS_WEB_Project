@@ -1,0 +1,14 @@
+.not-yet-implemented-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.not-yet-implemented-image {
+  width: 200px;
+  height: auto;
+}
+
+.not-yet-implemented-title {
+  font-size: 2em;
+  color: #ff0000; /* Example color */
+}
