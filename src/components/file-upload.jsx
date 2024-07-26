@@ -22,7 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-function FileUpload({ setPhotoURL, onUploadComplete, allowUnauthenticated = false }) {
+function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthenticated = false }) {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [file, setFile] = useState(null);
@@ -115,7 +115,7 @@ function FileUpload({ setPhotoURL, onUploadComplete, allowUnauthenticated = fals
 
     return (
       <div className="animate__animated animate__bounceInUp">
-          <Paper style={{ backgroundColor: "#d39494" }}><span><b>File Upload to Firebase Storage</b></span></Paper>
+          <Paper style={{ backgroundColor: "#d39494" }}><span><b>{`Upload a ${fileType} to Firebase`}</b></span></Paper>
           {!uploadSuccess &&
             <Paper style={{ backgroundColor: "#c46262" }}>
                 <button onClick={handleButtonClick}

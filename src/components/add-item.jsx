@@ -82,7 +82,7 @@ const AddItem = () => {
           value={comments}
           onChange={(e) => setComments(e.target.value)}
         />
-        <FileUpload setPhotoURL={setPhotoURL} onUploadComplete={() => setIsUploadComplete(true)} /> {/* Add FileUpload component */}
+        <FileUpload fileType="car picture" setPhotoURL={setPhotoURL} onUploadComplete={() => setIsUploadComplete(true)} /> {/* Add FileUpload component */}
         <button type="submit">Add Vehicle</button>
       </form>
     </div>
