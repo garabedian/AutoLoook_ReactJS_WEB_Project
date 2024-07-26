@@ -18,7 +18,8 @@ const ListCars = () => {
       }
     };
 
-    fetchCars();
+    fetchCars()
+      .then(res => console.log(res));
   }, []);
 
   if (loading) {

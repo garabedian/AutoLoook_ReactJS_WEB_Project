@@ -20,7 +20,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
 function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthenticated = false }) {
     const [isUploading, setIsUploading] = useState(false);
@@ -28,7 +27,7 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [progress, setProgress] = useState(0);
-    const [fileExists, setFileExists] = useState(false);
+    const [setFileExists] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const fileInputRef = useRef(null);
     const { user } = useContext(UserContext);
@@ -61,7 +60,7 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
             console.log('No authenticated user. Please log in.');
             return;
         }
-        await checkFileExists();
+        checkFileExists();
     };
 
     const checkFileExists = () => {
