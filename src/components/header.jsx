@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.css';
@@ -7,8 +7,14 @@ import projectLogo from "/images/car.png";
 import { UserContext } from '../contexts/user-context.jsx';
 import userAvatar from '/images/user.png';
 
-const Header = ({ handleLogout }) => {
-    const { user } = useContext(UserContext);
+const Header = () => {
+    const { user, logout } = useContext(UserContext);
+
+    const handleLogout = async () => {
+        await logout();
+        navigate('/AutoLoook_ReactJS_WEB_Project');
+    };
+
 
     return (
       <Navbar className="custom-navbar" variant="dark" expand="lg" fixed="top" style={{ marginBottom: '2%' }}>

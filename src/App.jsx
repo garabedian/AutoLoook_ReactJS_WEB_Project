@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Navigate, Route, Routes } from 'react-router-dom'; // Import useNavigate
 import { UserContext } from './contexts/user-context.jsx';
 import './App.css';
 import MainContent from "./components/main-content.jsx";
@@ -18,11 +18,7 @@ import NotYetImplemented from './components/not-yet-implemented.jsx';
 
 function App() {
     const [showImage, setShowImage] = useState(true);
-    const { user, setUser, logout } = useContext(UserContext); // Access logout from UserContext
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
-    const [isLoggingOut, setIsLoggingOut] = useState(false);
-    const navigate = useNavigate(); // Define navigate
-    const isFirstRender = useRef(true);
+    const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
         const checkUserSession = async () => {
@@ -39,16 +35,9 @@ function App() {
         checkUserSession();
     }, [setUser]);
 
-    const handleLogout = async () => {
-        setIsLoggingOut(true);
-        await logout(); // Call the logout function
-        setIsLoggingOut(false);
-        navigate('/AutoLoook_ReactJS_WEB_Project'); // Use navigate to redirect
-    };
-
     return (
       <>
-          <Header handleLogout={handleLogout}/>
+          <Header />
           {showImage && <Routes>
               <Route path="/AutoLoook_ReactJS_WEB_Project/*" element={<NotYetImplemented />}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project" element={<MainContent/>}/>
