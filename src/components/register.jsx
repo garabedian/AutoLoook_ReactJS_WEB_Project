@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -177,10 +176,10 @@ export default function SignUp() {
                       >
                           Sign Up
                       </Button>
-                      <Grid container justifyContent="flex-end">
+                      <Grid container >
                           <Grid item xs>
-                              <Link href="/AutoLoook_ReactJS_WEB_Project/login" variant="body2">
-                                  Already have an account? Sign in
+                              <Link to={'/AutoLoook_ReactJS_WEB_Project/login'} variant="body2">
+                                  {"Already have an account? Sign in"}
                               </Link>
                           </Grid>
                       </Grid>
