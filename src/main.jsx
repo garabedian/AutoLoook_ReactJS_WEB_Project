@@ -9,8 +9,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <UserProvider>
           <Router>
-              {/*<Link to="/">Home</Link>*/}
-              {/*<Link to="/about">About</Link>*/}
               <App/>
           </Router>
       </UserProvider>

@@ -15,7 +15,7 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.4",
-    "@mui/material": "^5.16.4",
+    "@mui/material": "^5.16.5",
     "animate.css": "^4.1.1",
     "backendless": "^7.3.3",
     "bootstrap": "^5.3.3",

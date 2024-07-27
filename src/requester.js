@@ -1,19 +1,32 @@
 async function requester(method, url, data) {
-    const options = {};
-    if (method !== 'GET') {
-        options.method = method;
-    }
-    I
-    if (data) {
+    const options = { method };
+    if (method !== 'GET' && method !== 'HEAD') {
         options.headers = {
             'Content-Type': 'application/json',
         };
-        options.body = JSON.stringify(data);
+        if (data) {
+            options.body = JSON.stringify(data);
+        }
     }
-    const response = await fetch(url, options);
-    const result = response.json();
 
-    return result;
+    const response = await fetch(url, options);
+
+    if (!response.ok) {
+        const textResponse = await response.text();
+        console.error('Error fetching data:', textResponse);
+        throw new Error('Unexpected response format');
+    }
+
+    // Check if the response is JSON
+    const contentType = response.headers.get('content-type');
+    if (contentType &&contentType.includes('application/json')) {
+        const jsonResponse = await response.json();
+        return jsonResponse;
+    } else {
+        const textResponse = await response.text();
+        console.error('Error fetching data:', textResponse);
+        throw new Error('Unexpected response format');
+    }
 }
 
 export const get = requester.bind(null, 'GET');
@@ -25,32 +38,3 @@ export const del = requester.bind(null, 'DELETE');
 // export const post = (url, data) => requester('POST', url, data);
 // export const put = (url, data) => requester('PUT', url, data);
 // export const del = (url, data) => requester('DELETE', url, data);
-
-
-
-// import * as request from './requester';
-// import GameListItem from './game-list-item/GameListItem';
-//
-// const BASE_URL = 'http://localhost:3030/jsonstore/games'
-// I
-// export const getAll = async () => {
-//     const result = await request.get(BASE_URL);
-//     const games = Object.values(result);
-//     return games;
-// };
-//
-//
-//
-// import * as gamesAPI from '../../api/games-api';
-//
-// export default function GameList() {
-//     I
-//     const [games, setGames] = useState([]);
-//     useEffect(() => {
-//         gamesAPI.getAll()
-//           .then(result => setGames(result));
-//     }, []);
-//     return (
-//       <section id="catalog-page"><h1>All Games</h1>
-//           {games.length > 0
-//             ? games.map(game => <GameListItem key={game._id} {...game} />)
