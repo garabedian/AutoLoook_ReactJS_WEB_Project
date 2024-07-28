@@ -95,10 +95,10 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
           () => {
               getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                   console.log('File available at', downloadURL);
-                  setIsUploading(false); // Stop uploading on success
-                  setUploadSuccess(true); // Indicate upload success
-                  setPhotoURL(downloadURL); // Set the photo URL in the parent component
-                  onUploadComplete(); // Notify parent component
+                  setIsUploading(false);
+                  setUploadSuccess(true);
+                  setPhotoURL(downloadURL);
+                  onUploadComplete();
               });
           }
         );

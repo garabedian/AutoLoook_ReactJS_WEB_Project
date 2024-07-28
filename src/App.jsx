@@ -15,6 +15,7 @@ import Register from './components/register.jsx';
 import AddItem from './components/add-item.jsx';
 import ListCars from "./components/list-items.jsx";
 import NotYetImplemented from './components/not-yet-implemented.jsx';
+import CarDetails from "./components/item-details.jsx";
 
 function App() {
     const [showImage, setShowImage] = useState(true);
@@ -46,6 +47,7 @@ function App() {
               <Route path="/AutoLoook_ReactJS_WEB_Project/file-upload" element={<FileUpload/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/re-login" element={<Relogin/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/list-items" element={<ListCars />} />
+              <Route path="/AutoLoook_ReactJS_WEB_Project/car/:id" element={<CarDetails />} />
               <Route path="/AutoLoook_ReactJS_WEB_Project/create-item"
                      element={user ? <AddItem/> : <Navigate to="/AutoLoook_ReactJS_WEB_Project/login"/>}/>
               <Route path="/AutoLoook_ReactJS_WEB_Project/not-yet-implemented" element={<NotYetImplemented />} />

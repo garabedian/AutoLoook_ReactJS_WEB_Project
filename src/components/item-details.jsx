@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { UserContext } from '../contexts/user-context.jsx';
 import Backendless from '../backendless';
 import FileUpload from './file-upload.jsx';
@@ -14,7 +14,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const defaultTheme = createTheme();
 
-const AddItem = () => {
+const ItemDetails = () => {
     const { user } = useContext(UserContext);
     const [item, setItem] = useState({
         make: '',
@@ -30,11 +30,24 @@ const AddItem = () => {
     const [error, setError] = useState('');
     const [isUploadComplete, setIsUploadComplete] = useState(false);
     const navigate = useNavigate();
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchItem = async () => {
+            try {
+                const fetchedItem = await Backendless.Data.of('cars').findById(id);
+                setItem(fetchedItem);
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+        fetchItem();
+    }, [id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!user) {
-            setError('You must be logged in to add a vehicle.');
+            setError('You must be logged in to update a vehicle.');
             return;
         }
 
@@ -73,7 +86,7 @@ const AddItem = () => {
                 }}
               >
                   <Typography component="h1" variant="h3">
-                      Add Vehicle
+                      Edit Vehicle
                   </Typography>
                   {error && <Typography color="error">{error}</Typography>}
                   <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -143,7 +156,19 @@ const AddItem = () => {
                         value={item.description}
                         onChange={handleChange}
                         multiline
-                        rows={4}
+                        rows={1}
+                      />
+                      <TextField
+                        margin="normal"
+                        fullWidth
+                        id="comments"
+                        label="Comments"
+                        name="comments"
+                        autoComplete="comments"
+                        value={item.comments}
+                        onChange={handleChange}
+                        multiline
+                        rows={3}
                       />
                       <FileUpload setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
                                   onUploadComplete={() => setIsUploadComplete(true)}/>
@@ -153,14 +178,13 @@ const AddItem = () => {
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                       >
-                          Add Vehicle
+                          Update Vehicle
                       </Button>
                   </Box>
               </Box>
           </Container>
       </ThemeProvider>
-    )
-      ;
+    );
 };
 
-export default AddItem;
+export default ItemDetails;
