@@ -25,7 +25,7 @@ const ItemDetails = () => {
         photoURL: '',
         description: '',
         type: 'UNKNOWN',
-        author_id: user ? user.uid : null,
+        ownerId: user ? user.uid : null,
     });
     const [error, setError] = useState('');
     const [isUploadComplete, setIsUploadComplete] = useState(false);
@@ -69,6 +69,8 @@ const ItemDetails = () => {
         setItem((prevItem) => ( { ...prevItem, [name]: value } ));
     };
 
+    const isOwner = user && user.objectId === item.ownerId;
+
     return (
       <ThemeProvider theme={defaultTheme}>
           <Container component="main" maxWidth="lg">
@@ -103,6 +105,7 @@ const ItemDetails = () => {
                             sx={{
                                 textAlign: 'left',
                             }}
+                            disabled={!isOwner}
                           >
                               <MenuItem value="SEDAN">SEDAN</MenuItem>
                               <MenuItem value="HATCHBACK">HATCHBACK</MenuItem>
@@ -122,6 +125,7 @@ const ItemDetails = () => {
                         autoComplete="make"
                         value={item.make}
                         onChange={handleChange}
+                        disabled={!isOwner}
                       />
                       <TextField
                         margin="normal"
@@ -133,6 +137,7 @@ const ItemDetails = () => {
                         autoComplete="model"
                         value={item.model}
                         onChange={handleChange}
+                        disabled={!isOwner}
                       />
                       <TextField
                         margin="normal"
@@ -145,6 +150,7 @@ const ItemDetails = () => {
                         autoComplete="productionYear"
                         value={item.productionYear}
                         onChange={handleChange}
+                        disabled={!isOwner}
                       />
                       <TextField
                         margin="normal"
@@ -157,6 +163,7 @@ const ItemDetails = () => {
                         onChange={handleChange}
                         multiline
                         rows={1}
+                        disabled={!isOwner}
                       />
                       <TextField
                         margin="normal"
@@ -170,15 +177,25 @@ const ItemDetails = () => {
                         multiline
                         rows={3}
                       />
-                      <FileUpload setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
-                                  onUploadComplete={() => setIsUploadComplete(true)}/>
+                      {item.photoURL && (
+                        <img
+                          src={item.photoURL}
+                          alt={`${item.make} ${item.model}`}
+                          style={{ width: '200px', height: 'auto', margin: '10px 0' }}
+                        />
+                      )}
+                      {isOwner && <FileUpload
+                        fileType="vehicle new photo"
+                        setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
+                        onUploadComplete={() => setIsUploadComplete(true)}
+                      />}
                       <Button
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                       >
-                          Update Vehicle
+                          {isOwner ? "Update Vehicle" : "Add Comment"}
                       </Button>
                   </Box>
               </Box>

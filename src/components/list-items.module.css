@@ -1,7 +1,21 @@
 .card-fixed-size {
-  /*width: 500px; !* Adjust the width as needed *!*/
-  height: 400px; /* Adjust the height as needed */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    max-height: fit-content;
+    object-fit: cover;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 10px;
 }

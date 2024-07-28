@@ -25,7 +25,7 @@ const AddItem = () => {
         photoURL: '',
         description: '',
         type: 'UNKNOWN',
-        author_id: user ? user.uid : null,
+        ownerId: user ? user.uid : null, // Setting ownerId here
     });
     const [error, setError] = useState('');
     const [isUploadComplete, setIsUploadComplete] = useState(false);
@@ -145,8 +145,10 @@ const AddItem = () => {
                         multiline
                         rows={4}
                       />
-                      <FileUpload setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
-                                  onUploadComplete={() => setIsUploadComplete(true)}/>
+                      <FileUpload
+                        fileType="vehicle photo"
+                        setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
+                        onUploadComplete={() => setIsUploadComplete(true)}/>
                       <Button
                         type="submit"
                         fullWidth
