@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackendlessAPI } from '../backendless';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row, Alert } from 'react-bootstrap';
 import { CircularProgress } from "@mui/material";
 import { UserContext } from '../contexts/user-context.jsx';
 import styles from './list-items.module.css';
@@ -13,14 +13,19 @@ const ListCars = () => {
     const [API_ID, API_KEY] = BackendlessAPI();
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchCars = async () => {
             try {
                 const carsData = await Backendless.Data.of('cars').find();
+                if (carsData.length === 0) {
+                    setError('No records available.');
+                }
                 setCars(carsData);
             } catch (error) {
                 console.error('Error fetching cars:', error);
+                setError('Error fetching cars. Please try again later.');
             } finally {
                 setLoading(false);
             }
@@ -74,6 +79,10 @@ const ListCars = () => {
 
     if (loading || !imagesLoaded) {
         return <CircularProgress size={120} thickness={8} sx={{ color: 'darkred' }}/>;
+    }
+
+    if (error) {
+        return <Alert variant="danger">{error}</Alert>;
     }
 
     return (

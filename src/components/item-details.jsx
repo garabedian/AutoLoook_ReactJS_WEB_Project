@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { formatDate } from '../utils/date-formatter.js';
 
 const defaultTheme = createTheme();
 
@@ -27,6 +28,8 @@ const ItemDetails = () => {
         type: 'UNKNOWN',
         ownerId: user ? user.uid : null,
     });
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
     const [error, setError] = useState('');
     const [isUploadComplete, setIsUploadComplete] = useState(false);
     const navigate = useNavigate();
@@ -37,6 +40,8 @@ const ItemDetails = () => {
             try {
                 const fetchedItem = await Backendless.Data.of('cars').findById(id);
                 setItem(fetchedItem);
+                const fetchedComments = await Backendless.Data.of('comments').find({ condition: `itemId = '${id}'` });
+                setComments(fetchedComments);
             } catch (err) {
                 setError(err.message);
             }
@@ -69,6 +74,30 @@ const ItemDetails = () => {
         setItem((prevItem) => ( { ...prevItem, [name]: value } ));
     };
 
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        if (!user) {
+            setError('You must be logged in to add a comment.');
+            return;
+        }
+
+        const commentData = {
+            itemId: id,
+            authorId: user.objectId,
+            authorEmail: user.email,
+            content: newComment,
+            created: new Date().toISOString(),
+        };
+
+        try {
+            await Backendless.Data.of('comments').save(commentData);
+            setComments([...comments, commentData]);
+            setNewComment('');
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     const isOwner = user && user.objectId === item.ownerId;
 
     return (
@@ -88,7 +117,7 @@ const ItemDetails = () => {
                 }}
               >
                   <Typography component="h1" variant="h3">
-                      Edit Vehicle
+                      {isOwner ? "Edit or Comment Your Vehicle" : "View or Comment Vehicle"}
                   </Typography>
                   {error && <Typography color="error">{error}</Typography>}
                   <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -165,18 +194,6 @@ const ItemDetails = () => {
                         rows={1}
                         disabled={!isOwner}
                       />
-                      <TextField
-                        margin="normal"
-                        fullWidth
-                        id="comments"
-                        label="Comments"
-                        name="comments"
-                        autoComplete="comments"
-                        value={item.comments}
-                        onChange={handleChange}
-                        multiline
-                        rows={3}
-                      />
                       {item.photoURL && (
                         <img
                           src={item.photoURL}
@@ -184,11 +201,13 @@ const ItemDetails = () => {
                           style={{ width: '200px', height: 'auto', margin: '10px 0' }}
                         />
                       )}
-                      {isOwner && <FileUpload
+                      {isOwner &&
+                        <>
+                        <FileUpload
                         fileType="vehicle new photo"
                         setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
                         onUploadComplete={() => setIsUploadComplete(true)}
-                      />}
+                      />
                       <Button
                         type="submit"
                         fullWidth
@@ -197,6 +216,45 @@ const ItemDetails = () => {
                       >
                           {isOwner ? "Update Vehicle" : "Add Comment"}
                       </Button>
+                        </>
+                      }
+                  </Box>
+                  <Box component="form" onSubmit={handleCommentSubmit} noValidate sx={{ mt: 1 }}>
+                      <TextField
+                        margin="normal"
+                        fullWidth
+                        id="newComment"
+                        label="Add a Comment"
+                        name="newComment"
+                        autoComplete="newComment"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        multiline
+                        rows={3}
+                      />
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                      >
+                          Add Comment
+                      </Button>
+                  </Box>
+                  <Box sx={{ mt: 2, width: '100%' }}>
+                      <Typography component="h2" variant="h5">
+                          Comments
+                      </Typography>
+                      {comments.map((comment) => (
+                        <Box key={comment.objectId} sx={{ mt: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px' }}>
+                            <Typography variant="body2" color="textSecondary">
+                                {` Commented by ${comment.authorEmail} on ${formatDate(comment.created)}`}
+                            </Typography>
+                            <Typography variant="body1">
+                                {comment.content}
+                            </Typography>
+                        </Box>
+                      ))}
                   </Box>
               </Box>
           </Container>
