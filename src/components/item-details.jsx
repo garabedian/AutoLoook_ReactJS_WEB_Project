@@ -31,7 +31,7 @@ const ItemDetails = () => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [error, setError] = useState('');
-    const [isUploadComplete, setIsUploadComplete] = useState(false);
+    const [isUploadComplete, setIsUploadComplete] = useState(true);
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -99,6 +99,7 @@ const ItemDetails = () => {
     };
 
     const isOwner = user && user.objectId === item.ownerId;
+    const filteredComments = comments.filter(comment => comment.itemId === id);
 
     return (
       <ThemeProvider theme={defaultTheme}>
@@ -203,19 +204,19 @@ const ItemDetails = () => {
                       )}
                       {isOwner &&
                         <>
-                        <FileUpload
-                        fileType="vehicle new photo"
-                        setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
-                        onUploadComplete={() => setIsUploadComplete(true)}
-                      />
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                      >
-                          {isOwner ? "Update Vehicle" : "Add Comment"}
-                      </Button>
+                            {/*<FileUpload*/}
+                            {/*  fileType="new vehicle new photo"*/}
+                            {/*  setPhotoURL={(url) => setItem({ ...item, photoURL: url })}*/}
+                            {/*  onUploadComplete={() => setIsUploadComplete(true)}*/}
+                            {/*/>*/}
+                            <Button
+                              type="submit"
+                              fullWidth
+                              variant="contained"
+                              sx={{ mt: 3, mb: 2 }}
+                            >
+                                {isOwner ? "Update Vehicle" : "Add Comment"}
+                            </Button>
                         </>
                       }
                   </Box>
@@ -241,21 +242,22 @@ const ItemDetails = () => {
                           Add Comment
                       </Button>
                   </Box>
+                  {filteredComments.length > 0  &&
                   <Box sx={{ mt: 2, width: '100%' }}>
                       <Typography component="h2" variant="h5">
                           Comments
                       </Typography>
-                      {comments.map((comment) => (
+                      {filteredComments.map((comment) => (
                         <Box key={comment.objectId} sx={{ mt: 2, p: 2, border: '1px solid #ccc', borderRadius: '4px' }}>
                             <Typography variant="body2" color="textSecondary">
-                                {` Commented by ${comment.authorEmail} on ${formatDate(comment.created)}`}
+                                {`Commented by ${comment.authorEmail} on ${formatDate(comment.created)}`}
                             </Typography>
                             <Typography variant="body1">
                                 {comment.content}
                             </Typography>
                         </Box>
                       ))}
-                  </Box>
+                  </Box>}
               </Box>
           </Container>
       </ThemeProvider>
