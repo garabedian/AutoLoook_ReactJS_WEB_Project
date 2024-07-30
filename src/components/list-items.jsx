@@ -14,6 +14,7 @@ const ListCars = () => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
     const [error, setError] = useState(null);
+    const [likedCars, setLikedCars] = useState(new Set());
 
     useEffect(() => {
         const fetchCars = async () => {
@@ -55,6 +56,23 @@ const ListCars = () => {
         console.log('Cars:', cars);
     }, [user, cars]);
 
+    useEffect(() => {
+        const fetchLikedCars = async () => {
+            if (user) {
+                try {
+                    const likesTable = Backendless.Data.of('likes');
+                    const query = Backendless.DataQueryBuilder.create().setWhereClause(`userId = '${user.objectId}'`);
+                    const likedCarsData = await likesTable.find(query);
+                    const likedCarIds = new Set(likedCarsData.map(like => like.carId));
+                    setLikedCars(likedCarIds);
+                } catch (error) {
+                    console.error('Error fetching liked cars:', error);
+                }
+            }
+        };
+        fetchLikedCars();
+    }, [user]);
+
     const handleLike = async (carId) => {
         try {
             const likesTable = Backendless.Data.of('likes');
@@ -68,6 +86,11 @@ const ListCars = () => {
                 car.likes -= 1;
                 await Backendless.Data.of('cars').save(car);
                 setCars(cars.map(c => c.objectId === carId ? car : c));
+                setLikedCars(prevLikedCars => {
+                    const newLikedCars = new Set(prevLikedCars);
+                    newLikedCars.delete(carId);
+                    return newLikedCars;
+                });
             } else {
                 // User has not liked the car, so add a like
                 await likesTable.save({ userId: user.objectId, carId });
@@ -75,6 +98,7 @@ const ListCars = () => {
                 car.likes += 1;
                 await Backendless.Data.of('cars').save(car);
                 setCars(cars.map(c => c.objectId === carId ? car : c));
+                setLikedCars(prevLikedCars => new Set(prevLikedCars).add(carId));
             }
         } catch (error) {
             console.error('Error liking/unliking car:', error);
@@ -127,8 +151,8 @@ const ListCars = () => {
                                           onClick={() => navigate(`/AutoLoook_ReactJS_WEB_Project/car/${car.objectId}`)}>
                                       Details
                                   </Button>
-                                  <Button variant="success" onClick={() => handleLike(car.objectId)}>
-                                      Like
+                                  <Button variant={likedCars.has(car.objectId) ? "outline-danger" : "success"} onClick={() => handleLike(car.objectId)}>
+                                      {likedCars.has(car.objectId) ? "Un-like" : "Like"}
                                   </Button>
                               </>
                             )}

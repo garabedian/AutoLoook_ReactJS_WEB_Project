@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import './file-upload.module.css';
 import { getDownloadURL, getMetadata, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper } from "@mui/material";
 import { UserContext } from '../contexts/user-context.jsx';
 import CircularProgressWithLabel from './linear-progres-with-label.jsx';
