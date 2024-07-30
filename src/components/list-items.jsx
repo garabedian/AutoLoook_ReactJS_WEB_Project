@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackendlessAPI } from '../backendless';
-import { Button, Card, Col, Row, Alert } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Row } from 'react-bootstrap';
 import { CircularProgress } from "@mui/material";
 import { UserContext } from '../contexts/user-context.jsx';
 import styles from './list-items.module.css';
@@ -57,12 +57,27 @@ const ListCars = () => {
 
     const handleLike = async (carId) => {
         try {
-            const car = await Backendless.Data.of('cars').findById(carId);
-            car.likes += 1;
-            await Backendless.Data.of('cars').save(car);
-            setCars(cars.map(c => c.objectId === carId ? car : c));
+            const likesTable = Backendless.Data.of('likes');
+            const query = Backendless.DataQueryBuilder.create().setWhereClause(`userId = '${user.objectId}' AND carId = '${carId}'`);
+            const existingLike = await likesTable.find(query);
+
+            if (existingLike.length > 0) {
+                // User already liked the car, so remove the like
+                await likesTable.remove(existingLike[0].objectId);
+                const car = await Backendless.Data.of('cars').findById(carId);
+                car.likes -= 1;
+                await Backendless.Data.of('cars').save(car);
+                setCars(cars.map(c => c.objectId === carId ? car : c));
+            } else {
+                // User has not liked the car, so add a like
+                await likesTable.save({ userId: user.objectId, carId });
+                const car = await Backendless.Data.of('cars').findById(carId);
+                car.likes += 1;
+                await Backendless.Data.of('cars').save(car);
+                setCars(cars.map(c => c.objectId === carId ? car : c));
+            }
         } catch (error) {
-            console.error('Error liking car:', error);
+            console.error('Error liking/unliking car:', error);
         }
     };
 
