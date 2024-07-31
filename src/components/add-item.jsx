@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, Tooltip } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -38,10 +38,10 @@ const AddItem = () => {
             return;
         }
 
-        if (!isUploadComplete) {
-            setError('Please wait for the file upload to complete.');
-            return;
-        }
+        // if (!isUploadComplete) {
+        //     setError('Please wait for the file upload to complete.');
+        //     return;
+        // }
 
         try {
             await Backendless.Data.of('cars').save(item);
@@ -148,21 +148,26 @@ const AddItem = () => {
                       <FileUpload
                         fileType="vehicle photo"
                         setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
-                        onUploadComplete={() => setIsUploadComplete(true)}/>
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                      >
-                          Add Vehicle
-                      </Button>
+                        onUploadComplete={() => setIsUploadComplete(true)}
+                      />
+                      <Tooltip title={!isUploadComplete ? "First upload a picture file" : ""}>
+                            <span>
+                                <Button
+                                  type="submit"
+                                  fullWidth
+                                  variant="contained"
+                                  sx={{ mt: 3, mb: 2 }}
+                                  disabled={!isUploadComplete}
+                                >
+                                    Add Vehicle
+                                </Button>
+                            </span>
+                      </Tooltip>
                   </Box>
               </Box>
           </Container>
       </ThemeProvider>
-    )
-      ;
+    );
 };
 
 export default AddItem;
