@@ -6,6 +6,7 @@ import { CircularProgress } from "@mui/material";
 import { UserContext } from '../contexts/user-context.jsx';
 import styles from './list-items.module.css';
 import { get } from "../requester.js";
+import CustomModal from "./custom-modal.jsx";
 
 const ListCars = () => {
     const [cars, setCars] = useState(null);
@@ -16,77 +17,38 @@ const ListCars = () => {
     const { user } = useContext(UserContext);
     const [error, setError] = useState(null);
     const [likedCars, setLikedCars] = useState(new Set());
+    const [showModal, setShowModal] = useState(false);
+    const [carToDelete, setCarToDelete] = useState(null);
 
     // Fetch cars based on the current minutes to demonstrate different ways of fetching data
     const currentMinutes = new Date().getMinutes();
-    switch (true) {
-      // Using async/await
-        case ( currentMinutes >= 0 && currentMinutes <= 20 ):
-            console.log("Minutes are between 0 and 20");
-            useEffect(() => {
-                const fetchCars = async () => {
-                    try {
-                        const carsData = await Backendless.Data.of('cars').find();
-                        if (carsData.length === 0) {
-                            setError('No records available.');
-                        }
-                        setCars(carsData);
-                    } catch (error) {
-                        console.error('Error fetching cars:', error);
-                        setError('Error fetching cars. Please try again later.');
-                    } finally {
-                        setLoading(false);
-                    }
-                };
-                fetchCars();
-            }, []);
-            break;
-
-      // Using fetch
-        case ( currentMinutes >= 21 && currentMinutes <= 40 ):
-            console.log("Minutes are between 21 and 40");
-            useEffect(() => {
-                fetch(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`)
-                  .then(response => {
-                      if (!response.ok) {
-                          throw new Error('Network response was not ok');
-                      }
-                      return response.json();
-                  })
-                  .then(carsData => {
-                      setCars(carsData);
-                  })
-                  .catch(error => {
-                      console.error('Error fetching cars:', error);
-                  })
-                  .finally(() => {
-                      setLoading(false);
-                  });
-            }, []);
-            break;
-
-      // Using requester.js
-        default:
-            console.log("Minutes are between 41 and 60");
-            useEffect(() => {
-                const fetchCars = async () => {
-                    try {
-                        const carsData = await get(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, null);
-                        if (carsData.length === 0) {
-                            setError('No records available.');
-                        }
-                        setCars(carsData);
-                    } catch (error) {
-                        console.error('Error fetching cars:', error);
-                        setError('Error fetching cars. Please try again later.');
-                    } finally {
-                        setLoading(false);
-                    }
-                };
-                fetchCars();
-            }, []);
-            break;
-    }
+    useEffect(() => {
+        const fetchCars = async () => {
+            try {
+                let carsData;
+                if (currentMinutes >= 0 && currentMinutes <= 20) {
+                    // Using async/await and Backendless
+                    console.log("Minutes are between 0 and 20");
+                    carsData = await Backendless.Data.of('cars').find();
+                } else if (currentMinutes >= 21 && currentMinutes <= 40) {
+                    // Using fetch
+                    console.log("Minutes are between 21 and 40");
+                    const response = await fetch(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`);
+                    carsData = await response.json();
+                } else {
+                    // Using requester.js
+                    console.log("Minutes are between 41 and 60");
+                    carsData = await get(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, null);
+                }
+                setCars(carsData);
+            } catch (error) {
+                console.error('Error fetching cars:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCars();
+    }, [currentMinutes, API_ID, API_KEY]);
 
     useEffect(() => {
         if (cars) {
@@ -159,14 +121,19 @@ const ListCars = () => {
         }
     };
 
-    const handleDelete = async (carId) => {
-        if (window.confirm('Are you sure you want to delete this car?')) {
-            try {
-                await Backendless.Data.of('cars').remove(carId);
-                setCars(cars.filter(c => c.objectId !== carId));
-            } catch (error) {
-                console.error('Error deleting car:', error);
-            }
+    const handleDelete = async (car) => {
+        setCarToDelete(car);
+        setShowModal(true);
+    };
+
+    const confirmDelete = async () => {
+        try {
+            await Backendless.Data.of('cars').remove(carToDelete.objectId);
+            setCars(cars.filter(c => c.objectId !== carToDelete.objectId));
+            setShowModal(false);
+            setCarToDelete(null);
+        } catch (error) {
+            console.error('Error deleting car:', error);
         }
     };
 
@@ -179,55 +146,64 @@ const ListCars = () => {
     }
 
     return (
-      cars &&
-      <Row>
-          {cars.map(car => (
-            <Col key={car.objectId} sm={12} md={6} lg={4}>
-                <Card className={`mb-4 ${styles['card-fixed-size']}`}>
-                    <Card.Img className={styles['card-img-top']} variant="top" src={car.photoURL}
-                              alt={`${car.make} ${car.model}`}/>
-                    <Card.Body>
-                        <Card.Title>{car.make} {car.model}</Card.Title>
-                        <Card.Text>
-                            Year: {car.productionYear}<br/>
-                            Likes: {car.likes}<br/>
-                        </Card.Text>
-                        <div className={styles['button-group']}>
-                            {!user && (
-                              <Button variant="primary"
-                                      onClick={() => navigate('/AutoLoook_ReactJS_WEB_Project/login')}>
-                                  Login to see more
-                              </Button>
-                            )}
-                            {user && user.objectId !== car.ownerId && (
-                              <>
-                                  <Button variant="info"
-                                          onClick={() => navigate(`/AutoLoook_ReactJS_WEB_Project/car/${car.objectId}`)}>
-                                      Details
+      <>
+          <br/>
+          cars &&
+          <Row>
+              {cars.map(car => (
+                <Col key={car.objectId} sm={12} md={6} lg={4}>
+                    <Card className={`mb-4 ${styles['card-fixed-size']}`}>
+                        <Card.Img className={styles['card-img-top']} variant="top" src={car.photoURL}
+                                  alt={`${car.make} ${car.model}`}/>
+                        <Card.Body>
+                            <Card.Title>{car.make} {car.model}</Card.Title>
+                            <Card.Text>
+                                Year: {car.productionYear}<br/>
+                                Likes: {car.likes}<br/>
+                            </Card.Text>
+                            <div className={styles['button-group']}>
+                                {!user && (
+                                  <Button variant="primary"
+                                          onClick={() => navigate('/AutoLoook_ReactJS_WEB_Project/login')}>
+                                      Login to see more
                                   </Button>
-                                  <Button variant={likedCars.has(car.objectId) ? "outline-danger" : "success"}
-                                          onClick={() => handleLike(car.objectId)}>
-                                      {likedCars.has(car.objectId) ? "Un-like" : "Like"}
-                                  </Button>
-                              </>
-                            )}
-                            {user && user.objectId === car.ownerId && (
-                              <>
-                                  <Button variant="warning"
-                                          onClick={() => navigate(`/AutoLoook_ReactJS_WEB_Project/car/${car.objectId}`)}>
-                                      Edit
-                                  </Button>
-                                  <Button variant="danger" onClick={() => handleDelete(car.objectId)}>
-                                      Delete
-                                  </Button>
-                              </>
-                            )}
-                        </div>
-                    </Card.Body>
-                </Card>
-            </Col>
-          ))}
-      </Row>
+                                )}
+                                {user && user.objectId !== car.ownerId && (
+                                  <>
+                                      <Button variant="info"
+                                              onClick={() => navigate(`/AutoLoook_ReactJS_WEB_Project/car/${car.objectId}`)}>
+                                          Details
+                                      </Button>
+                                      <Button variant={likedCars.has(car.objectId) ? "outline-danger" : "success"}
+                                              onClick={() => handleLike(car.objectId)}>
+                                          {likedCars.has(car.objectId) ? "Un-like" : "Like"}
+                                      </Button>
+                                  </>
+                                )}
+                                {user && user.objectId === car.ownerId && (
+                                  <>
+                                      <Button variant="warning"
+                                              onClick={() => navigate(`/AutoLoook_ReactJS_WEB_Project/car/${car.objectId}`)}>
+                                          Edit
+                                      </Button>
+                                      <Button variant="danger" onClick={() => handleDelete(car)}>
+                                          Delete
+                                      </Button>
+                                  </>
+                                )}
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+              ))}
+          </Row>
+          <CustomModal
+            show={showModal}
+            handleClose={() => setShowModal(false)}
+            handleConfirm={confirmDelete}
+            car={carToDelete || {}}
+          />
+      </>
     );
 };
 

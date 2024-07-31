@@ -38,10 +38,10 @@ const AddItem = () => {
             return;
         }
 
-        // if (!isUploadComplete) {
-        //     setError('Please wait for the file upload to complete.');
-        //     return;
-        // }
+        if (!isUploadComplete) {
+            // setError('Please wait for the file upload to complete.');
+            return;
+        }
 
         try {
             await Backendless.Data.of('cars').save(item);
