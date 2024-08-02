@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './custom.css';
@@ -9,10 +9,13 @@ import userAvatar from '/images/user.png';
 
 const Header = () => {
     const { user, logout } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleLogout = async () => {
         await logout();
+        navigate('/AutoLoook_ReactJS_WEB_Project');
     };
+
 
     return (
       <Navbar className="custom-navbar" variant="dark" expand="lg" fixed="top" style={{ marginBottom: '2%' }}>
@@ -46,7 +49,7 @@ const Header = () => {
                             />
                         </Nav.Link>
                         <Nav.Link as={Link}>Hello, {user.name || user.email}!</Nav.Link>
-                        <Nav.Link as={Link} to={'/AutoLoook_ReactJS_WEB_Project'} onClick={handleLogout}>Logout</Nav.Link>
+                        <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                     </>
                   ) : (
                     <>

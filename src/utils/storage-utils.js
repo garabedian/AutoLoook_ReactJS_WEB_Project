@@ -3,5 +3,5 @@ export const clearStorageAndReload = () => {
 
     localStorage.clear();
 
-    window.location.reload();
+    // window.location.reload();
 };
