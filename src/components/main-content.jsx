@@ -2,13 +2,14 @@ import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import photoSeat from "/images/seat.png";
 import { UserContext } from '../contexts/user-context.jsx';
-import { useContext } from "react";
+import React, { useContext } from "react";
 
 export default function MainContent() {
     const { user } = useContext(UserContext);
 
     return (
       <>
+          <br/>
           <div>
               <button style={{ backgroundColor: "transparent", border: "none" }}
                       onClick={() => window.location.reload()}>
