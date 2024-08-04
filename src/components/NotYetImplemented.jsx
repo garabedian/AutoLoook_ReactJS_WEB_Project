@@ -1,6 +1,6 @@
 import React from 'react';
 import notYetImplementedImage from '/images/404face.png';
-import './custom.css';
+import './Custom.css';
 
 const NotYetImplemented = () => {
     return (

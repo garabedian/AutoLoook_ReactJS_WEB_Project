@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { BackendlessAPI } from '../backendless';
 import { Alert, Button, Card, Col, Row } from 'react-bootstrap';
 import { CircularProgress } from "@mui/material";
-import { UserContext } from '../contexts/user-context.jsx';
-import styles from './list-items.module.css';
+import { UserContext } from '../contexts/UserContext.jsx';
+import styles from './ListItems.module.css';
 import { get } from "../requester.js";
-import CustomModal from "./custom-modal.jsx";
+import CustomModal from "./CustomModal.jsx";
 
-const ListCars = () => {
+const ListItems = () => {
     const [cars, setCars] = useState(null);
     const [loading, setLoading] = useState(true);
     const [imagesLoaded, setImagesLoaded] = useState(false);
@@ -207,4 +207,4 @@ const ListCars = () => {
     );
 };
 
-export default ListCars;
+export default ListItems;

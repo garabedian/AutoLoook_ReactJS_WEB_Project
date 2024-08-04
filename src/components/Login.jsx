@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Backendless from '../backendless';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/user-context.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';

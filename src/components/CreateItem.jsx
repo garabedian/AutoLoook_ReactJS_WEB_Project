@@ -1,12 +1,12 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, CssBaseline, Box, Typography, FormControl, InputLabel, MenuItem, Select, TextField, Button, Tooltip } from '@mui/material';
-import FileUpload from './file-upload.jsx';
-import useAddItem from '../hooks/use-add-item.jsx';
+import FileUpload from './FileUpload.jsx';
+import useCreateItem from '../hooks/useCreateItem.jsx';
 
 const defaultTheme = createTheme();
 
-const AddItem = () => {
+const CreateItem = () => {
     const {
         item,
         error,
@@ -14,7 +14,7 @@ const AddItem = () => {
         setItem,
         handleSubmit,
         handleChange,
-    } = useAddItem();
+    } = useCreateItem();
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -128,4 +128,4 @@ const AddItem = () => {
     );
 };
 
-export default AddItem;
+export default CreateItem;

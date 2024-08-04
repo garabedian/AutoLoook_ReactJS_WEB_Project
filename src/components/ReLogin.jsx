@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import Backendless from '../backendless';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/user-context.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,7 +18,7 @@ import { updateUserToken } from '../utils/token-utils.js';
 
 const defaultTheme = createTheme();
 
-const Relogin = () => {
+const ReLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -103,4 +103,4 @@ const Relogin = () => {
   );
 };
 
-export default Relogin;
+export default ReLogin;

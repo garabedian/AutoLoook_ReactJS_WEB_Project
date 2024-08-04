@@ -1,10 +1,10 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import './file-upload.module.css';
+import './FileUpload.module.css';
 import { getDownloadURL, getMetadata, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { initializeApp } from "firebase/app";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper } from "@mui/material";
-import { UserContext } from '../contexts/user-context.jsx';
-import CircularProgressWithLabel from './linear-progres-with-label.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
+import CircularProgressWithLabel from './LinearProgressWithLabel.jsx';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

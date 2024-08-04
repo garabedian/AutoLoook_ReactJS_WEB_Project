@@ -10,13 +10,13 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import FileUpload from './file-upload.jsx';
-import { UserContext } from '../contexts/user-context.jsx';
+import FileUpload from './FileUpload.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import Backendless from '../backendless';
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function Register() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

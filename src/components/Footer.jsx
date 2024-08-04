@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './custom.css';
+import './Custom.css';
 import projectSound from '/sounds/Bolero.mp3';
 
 const Footer = ({ showImage, setShowImage }) => {

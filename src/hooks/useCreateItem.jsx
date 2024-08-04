@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/user-context.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import Backendless from '../backendless.js';
 
-export default function useAddItem() {
+export default function useCreateItem() {
     const { user } = useContext(UserContext);
     const [item, setItem] = useState({
         make: '',

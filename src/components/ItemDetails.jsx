@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { UserContext } from '../contexts/user-context.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import Backendless from '../backendless';
-import FileUpload from './file-upload.jsx';
+import FileUpload from './FileUpload.jsx';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';

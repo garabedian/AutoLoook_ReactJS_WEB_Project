@@ -1,7 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import photoSeat from "/images/seat.png";
-import { UserContext } from '../contexts/user-context.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import React, { useContext } from "react";
 
 export default function MainContent() {

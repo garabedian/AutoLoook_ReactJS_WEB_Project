@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Image, Nav, Navbar } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './custom.css';
+import './Custom.css';
 import projectLogo from "/images/car.png";
-import { UserContext } from '../contexts/user-context.jsx';
+import { UserContext } from '../contexts/UserContext.jsx';
 import userAvatar from '/images/user.png';
 
 const Header = () => {
