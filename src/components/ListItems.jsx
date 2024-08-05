@@ -15,39 +15,45 @@ const ListItems = () => {
     const [API_ID, API_KEY] = BackendlessAPI();
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
-    const [error, setError] = useState(null);
     const [likedCars, setLikedCars] = useState(new Set());
     const [showModal, setShowModal] = useState(false);
     const [carToDelete, setCarToDelete] = useState(null);
 
-    // Fetch cars based on the current minutes to demonstrate different ways of fetching data
     const currentMinutes = new Date().getMinutes();
+
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const fetchCars = async () => {
             try {
                 let carsData;
                 if (currentMinutes >= 0 && currentMinutes <= 20) {
-                    // Using async/await and Backendless
                     console.log("Minutes are between 0 and 20");
                     carsData = await Backendless.Data.of('cars').find();
                 } else if (currentMinutes >= 21 && currentMinutes <= 40) {
-                    // Using fetch
                     console.log("Minutes are between 21 and 40");
-                    const response = await fetch(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`);
+                    const response = await fetch(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, { signal });
                     carsData = await response.json();
                 } else {
-                    // Using requester.js
                     console.log("Minutes are between 41 and 60");
-                    carsData = await get(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, null);
+                    carsData = await get(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, null, { signal });
                 }
                 setCars(carsData);
             } catch (error) {
-                console.error('Error fetching cars:', error);
+                if (error.name !== 'AbortError') {
+                    console.error('Error fetching cars:', error);
+                }
             } finally {
                 setLoading(false);
             }
         };
+
         fetchCars();
+
+        return () => {
+            controller.abort();
+        };
     }, [currentMinutes, API_ID, API_KEY]);
 
     useEffect(() => {
@@ -73,20 +79,30 @@ const ListItems = () => {
     }, [user, cars]);
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+
         const fetchLikedCars = async () => {
             if (user) {
                 try {
                     const likesTable = Backendless.Data.of('likes');
                     const query = Backendless.DataQueryBuilder.create().setWhereClause(`userId = '${user.objectId}'`);
-                    const likedCarsData = await likesTable.find(query);
+                    const likedCarsData = await likesTable.find(query, { signal });
                     const likedCarIds = new Set(likedCarsData.map(like => like.carId));
                     setLikedCars(likedCarIds);
                 } catch (error) {
-                    console.error('Error fetching liked cars:', error);
+                    if (error.name !== 'AbortError') {
+                        console.error('Error fetching liked cars:', error);
+                    }
                 }
             }
         };
+
         fetchLikedCars();
+
+        return () => {
+            controller.abort();
+        };
     }, [user]);
 
     const handleLike = async (carId) => {
@@ -96,7 +112,6 @@ const ListItems = () => {
             const existingLike = await likesTable.find(query);
 
             if (existingLike.length > 0) {
-                // User already liked the car, so remove the like
                 await likesTable.remove(existingLike[0].objectId);
                 const car = await Backendless.Data.of('cars').findById(carId);
                 car.likes -= 1;
@@ -108,7 +123,6 @@ const ListItems = () => {
                     return newLikedCars;
                 });
             } else {
-                // User has not liked the car, so add a like
                 await likesTable.save({ userId: user.objectId, carId });
                 const car = await Backendless.Data.of('cars').findById(carId);
                 car.likes += 1;
@@ -139,10 +153,6 @@ const ListItems = () => {
 
     if (loading || !imagesLoaded) {
         return <CircularProgress size={120} thickness={8} sx={{ color: 'darkred' }}/>;
-    }
-
-    if (error) {
-        return <Alert variant="danger">{error}</Alert>;
     }
 
     return (
