@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext.jsx';
 import Backendless from '../backendless.js';
 
-const DEFAULT_PHOTO_URL = 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fgeneric.jpg?alt=media&token=c5811e24-3ff5-499c-a1dd-8629f782a0b9';
+const DEFAULT_CAR_PHOTO_URL = 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fgeneric_car.jpg?alt=media&token=d4df344b-739b-469c-ac7a-91ad44e7901e';
 
 export default function useCreateItem() {
     const { user } = useContext(UserContext);
@@ -13,7 +13,7 @@ export default function useCreateItem() {
         productionYear: 0,
         likes: 0,
         comments: '',
-        photoURL: DEFAULT_PHOTO_URL,
+        photoURL: DEFAULT_CAR_PHOTO_URL,
         description: '',
         type: 'UNKNOWN',
         ownerId: user ? user.uid : null,
@@ -29,7 +29,7 @@ export default function useCreateItem() {
             return;
         }
 
-        if (!isUploadComplete && item.photoURL === DEFAULT_PHOTO_URL) {
+        if (!isUploadComplete && item.photoURL === DEFAULT_CAR_PHOTO_URL) {
             setError('Please upload a picture or use the default image.');
             return;
         }

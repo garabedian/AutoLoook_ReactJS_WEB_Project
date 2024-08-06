@@ -13,8 +13,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FileUpload from './FileUpload.jsx';
 import { UserContext } from '../contexts/UserContext.jsx';
 import Backendless from '../backendless';
+import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 
 const defaultTheme = createTheme();
+const DEFAULT_USER_PHOTO_URL = 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fuser.png?alt=media&token=1298c853-b3e5-441f-99c3-1b9d8155ffe2';
 
 export default function Register() {
     const [email, setEmail] = useState('');
@@ -24,6 +26,7 @@ export default function Register() {
     const [lastName, setLastName] = useState('');
     const [photoURL, setPhotoURL] = useState('');
     const [isUploadComplete, setIsUploadComplete] = useState(false);
+    const [useDefaultPicture, setUseDefaultPicture] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
@@ -47,10 +50,21 @@ export default function Register() {
         logoutUser();
     }, [setUser]);
 
+    const handleCheckboxChange = (event) => {
+        setUseDefaultPicture(event.target.checked);
+        if (event.target.checked) {
+            setPhotoURL(DEFAULT_USER_PHOTO_URL);
+            setIsUploadComplete(true);
+        } else {
+            setPhotoURL('');
+            setIsUploadComplete(false);
+        }
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (!isUploadComplete) {
-            setError('Please wait for the file upload to complete.');
+        if (!isUploadComplete && !useDefaultPicture) {
+            // setError('Please wait for the file upload to complete.');
             return;
         }
 
@@ -164,19 +178,41 @@ export default function Register() {
                               />
                           </Grid>
                           <Grid item xs={12}>
-                              <FileUpload setPhotoURL={setPhotoURL} fileType="profile photo" onUploadComplete={() => setIsUploadComplete(true)}/>
+                              <FormControlLabel
+                                control={
+                                    <Checkbox
+                                      checked={useDefaultPicture}
+                                      onChange={handleCheckboxChange}
+                                      name="useDefaultPicture"
+                                      color="primary"
+                                    />
+                                }
+                                label="Use default generic picture"
+                              />
                           </Grid>
+                          {!useDefaultPicture && (
+                            <Grid item xs={12}>
+                                <FileUpload setPhotoURL={setPhotoURL} allowUnauthenticated={true} fileType="profile photo"
+                                            onUploadComplete={() => setIsUploadComplete(true)}/>
+                            </Grid>
+                          )}
                       </Grid>
                       {error && <Typography color="error">{error}</Typography>}
-                      <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                      >
-                          Sign Up
-                      </Button>
-                      <Grid container >
+                      <Tooltip
+                        title={!isUploadComplete && !useDefaultPicture ? "First upload a picture file or select the default picture" : ""}>
+                          <span>
+                              <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                                disabled={!isUploadComplete && !useDefaultPicture}
+                              >
+                                  Sign Up
+                              </Button>
+                          </span>
+                      </Tooltip>
+                      <Grid container>
                           <Grid item xs>
                               <Link to={'/AutoLoook_ReactJS_WEB_Project/login'} variant="body2">
                                   {"Already have an account? Sign in"}

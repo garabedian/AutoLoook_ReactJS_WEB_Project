@@ -41,7 +41,7 @@ const CreateItem = () => {
         if (event.target.checked) {
             setItem({
                 ...item,
-                photoURL: 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fgeneric.jpg?alt=media&token=c5811e24-3ff5-499c-a1dd-8629f782a0b9'
+                photoURL: 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fgeneric_car.jpg?alt=media&token=d4df344b-739b-469c-ac7a-91ad44e7901e'
             });
             setIsUploadComplete(true);
         } else {
