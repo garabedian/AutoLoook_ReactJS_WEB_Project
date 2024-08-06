@@ -115,7 +115,7 @@ const CreateItem = () => {
                       />
                       <TextField
                         margin="normal"
-                        required
+                        // required
                         fullWidth
                         id="productionYear"
                         label="Build Year"

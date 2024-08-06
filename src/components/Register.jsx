@@ -118,7 +118,7 @@ export default function Register() {
                               <TextField
                                 autoComplete="given-name"
                                 name="firstName"
-                                required
+                                // required
                                 fullWidth
                                 id="firstName"
                                 label="First Name"
@@ -129,7 +129,7 @@ export default function Register() {
                           </Grid>
                           <Grid item xs={12} sm={6}>
                               <TextField
-                                required
+                                // required
                                 fullWidth
                                 id="lastName"
                                 label="Last Name"

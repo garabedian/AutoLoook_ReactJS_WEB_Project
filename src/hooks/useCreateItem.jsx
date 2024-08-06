@@ -10,7 +10,7 @@ export default function useCreateItem() {
     const [item, setItem] = useState({
         make: '',
         model: '',
-        productionYear: 0,
+        productionYear: null,
         likes: 0,
         comments: '',
         photoURL: DEFAULT_CAR_PHOTO_URL,

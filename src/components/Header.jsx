@@ -16,7 +16,6 @@ const Header = () => {
         navigate('/AutoLoook_ReactJS_WEB_Project');
     };
 
-
     return (
       <Navbar className="custom-navbar" variant="dark" expand="lg" fixed="top" style={{ marginBottom: '2%' }}>
           <Navbar.Toggle aria-controls="navbarNavDropdown"/>
@@ -48,7 +47,7 @@ const Header = () => {
                               alt="Avatar"
                             />
                         </Nav.Link>
-                        <Nav.Link as={Link}>Hello, {user.name || user.email}!</Nav.Link>
+                        <Nav.Link as={Link}>Hello, {(user.name && user.name.length > 1) ? user.name : user.email}!</Nav.Link>
                         <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
                     </>
                   ) : (
