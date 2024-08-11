@@ -26,7 +26,7 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [progress, setProgress] = useState(0);
-    const [setFileExists] = useState(false);
+    const [fileExists, setFileExists] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
     const fileInputRef = useRef(null);
     const { user } = useContext(UserContext);
@@ -70,13 +70,17 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
               setFileExists(true);
               setOpenDialog(true);
           })
-          .catch(() => {
-              uploadFile();
+          .catch((error) => {
+              if (error.code === 'storage/object-not-found') {
+                  uploadFile();
+              } else {
+                  console.error('Error checking file existence:', error);
+              }
           });
     };
 
     const uploadFile = () => {
-        setIsUploading(true); // Start uploading
+        setIsUploading(true);
         const storage = getStorage();
         const storageRef = ref(storage, `files/${file.name}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -84,12 +88,12 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
         uploadTask.on('state_changed',
           (snapshot) => {
               const bytesProgress = ( snapshot.bytesTransferred / snapshot.totalBytes ) * 100;
-              setProgress(bytesProgress); // Update progress bar
+              setProgress(bytesProgress);
               console.log('Upload is ' + bytesProgress + '% done');
           },
           (error) => {
               console.error('Upload failed', error);
-              setIsUploading(false); // Stop uploading on error
+              setIsUploading(false);
           },
           () => {
               getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -108,6 +112,7 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
         if (action === 'tryAgain') {
             setFile(null);
             setPreviewUrl('');
+            setFileExists(false);
         }
     };
 
@@ -146,6 +151,11 @@ function FileUpload({ fileType, setPhotoURL, onUploadComplete, allowUnauthentica
                                                 borderRadius: "10px",
                                             }}/>}
                     </div>
+                    {fileExists && (
+                      <div style={{ color: 'red' }}>
+                          <strong>The file already exists. Please choose a different file.</strong>
+                      </div>
+                    )}
                     <Button onClick={handleUpload}
                             sx={{
                                 color: "#d9bf97",

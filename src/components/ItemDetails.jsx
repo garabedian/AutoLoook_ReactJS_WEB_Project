@@ -32,6 +32,7 @@ const ItemDetails = () => {
     const [newComment, setNewComment] = useState('');
     const [error, setError] = useState('');
     const [isUploadComplete, setIsUploadComplete] = useState(true);
+    const [isUpdated, setIsUpdated] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -71,6 +72,7 @@ const ItemDetails = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        setIsUpdated(true);
         setItem((prevItem) => ( { ...prevItem, [name]: value } ));
     };
 
@@ -214,6 +216,7 @@ const ItemDetails = () => {
                               fullWidth
                               variant="contained"
                               sx={{ mt: 3, mb: 2 }}
+                              disabled={!isUpdated}
                             >
                                 {isOwner ? "Update Vehicle" : "Add Comment"}
                             </Button>
@@ -238,6 +241,7 @@ const ItemDetails = () => {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
+                        disabled={!newComment.trim()}
                       >
                           Add Comment
                       </Button>

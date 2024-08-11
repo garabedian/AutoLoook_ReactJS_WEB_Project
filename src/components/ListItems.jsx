@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BackendlessAPI } from '../backendless';
-import { Alert, Button, Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import { CircularProgress } from "@mui/material";
 import { UserContext } from '../contexts/UserContext.jsx';
 import styles from './ListItems.module.css';
@@ -29,13 +29,16 @@ const ListItems = () => {
             try {
                 let carsData;
                 if (currentMinutes >= 0 && currentMinutes <= 20) {
+                    // Using Backendless methods
                     console.log("Minutes are between 0 and 20");
                     carsData = await Backendless.Data.of('cars').find();
                 } else if (currentMinutes >= 21 && currentMinutes <= 40) {
+                    // Using fetch
                     console.log("Minutes are between 21 and 40");
                     const response = await fetch(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, { signal });
                     carsData = await response.json();
                 } else {
+                    // Using requester.js
                     console.log("Minutes are between 41 and 60");
                     carsData = await get(`https://api.backendless.com/${API_ID}/${API_KEY}/data/cars`, null, { signal });
                 }
@@ -73,6 +76,7 @@ const ListItems = () => {
         }
     }, [cars]);
 
+    // For debugging purposes
     useEffect(() => {
         console.log('Current User:', user);
         console.log('Cars:', cars);
@@ -142,6 +146,23 @@ const ListItems = () => {
 
     const confirmDelete = async () => {
         try {
+            // Fetch and delete related likes
+            const likesTable = Backendless.Data.of('likes');
+            const likesQuery = Backendless.DataQueryBuilder.create().setWhereClause(`carId = '${carToDelete.objectId}'`);
+            const relatedLikes = await likesTable.find(likesQuery);
+            for (const like of relatedLikes) {
+                await likesTable.remove(like.objectId);
+            }
+
+            // Fetch and delete related comments
+            const commentsTable = Backendless.Data.of('comments');
+            const commentsQuery = Backendless.DataQueryBuilder.create().setWhereClause(`itemId = '${carToDelete.objectId}'`);
+            const relatedComments = await commentsTable.find(commentsQuery);
+            for (const comment of relatedComments) {
+                await commentsTable.remove(comment.objectId);
+            }
+
+            // Delete the car
             await Backendless.Data.of('cars').remove(carToDelete.objectId);
             setCars(cars.filter(c => c.objectId !== carToDelete.objectId));
             setShowModal(false);

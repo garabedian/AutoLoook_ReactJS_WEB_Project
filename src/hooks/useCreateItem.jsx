@@ -29,8 +29,9 @@ export default function useCreateItem() {
             return;
         }
 
-        if (!isUploadComplete && item.photoURL === DEFAULT_CAR_PHOTO_URL) {
-            setError('Please upload a picture or use the default image.');
+        if (!isUploadComplete) {
+            // setError('Please upload a picture or use the default image.');
+            console.error('Please upload a picture or use the default image.');
             return;
         }
 

@@ -32,6 +32,8 @@ const CreateItem = () => {
     } = useCreateItem();
 
     const [useDefaultPicture, setUseDefaultPicture] = useState(false);
+
+    // Clean up the checkbox state when the component is unmounted
     useEffect(() => {
         return () => setUseDefaultPicture(false);
     }, []);
