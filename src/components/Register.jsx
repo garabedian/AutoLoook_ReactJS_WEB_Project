@@ -16,7 +16,7 @@ import Backendless from '../backendless';
 import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 
 const defaultTheme = createTheme();
-const DEFAULT_USER_PHOTO_URL = 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fuser.png?alt=media&token=1298c853-b3e5-441f-99c3-1b9d8155ffe2';
+const DEFAULT_USER_PHOTO_URL = 'https://placehold.co/200x200/cccccc/555555?text=No+Photo';
 
 export default function Register() {
     const [email, setEmail] = useState('');
@@ -193,6 +193,7 @@ export default function Register() {
                           {!useDefaultPicture && (
                             <Grid item xs={12}>
                                 <FileUpload setPhotoURL={setPhotoURL} allowUnauthenticated={true} fileType="profile photo"
+                                            folder="autoloook/Users"
                                             onUploadComplete={() => setIsUploadComplete(true)}/>
                             </Grid>
                           )}

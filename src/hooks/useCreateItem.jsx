@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext.jsx';
 import Backendless from '../backendless.js';
 
-const DEFAULT_CAR_PHOTO_URL = 'https://firebasestorage.googleapis.com/v0/b/autoloook.appspot.com/o/files%2Fgeneric_car.jpg?alt=media&token=d4df344b-739b-469c-ac7a-91ad44e7901e';
+const DEFAULT_CAR_PHOTO_URL = 'https://placehold.co/400x300/cccccc/555555?text=No+Image';
 
 export default function useCreateItem() {
     const { user } = useContext(UserContext);

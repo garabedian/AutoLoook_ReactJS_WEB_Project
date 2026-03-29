@@ -70,9 +70,8 @@ const ListItems = () => {
                 });
             });
 
-            Promise.all(imagePromises)
-              .then(() => setImagesLoaded(true))
-              .catch(error => console.error('Error loading images:', error));
+            Promise.allSettled(imagePromises)
+              .then(() => setImagesLoaded(true));
         }
     }, [cars]);
 
@@ -179,7 +178,6 @@ const ListItems = () => {
     return (
       <>
           <br/>
-          cars &&
           <Row>
               {cars.map(car => (
                 <Col key={car.objectId} sm={12} md={6} lg={4}>

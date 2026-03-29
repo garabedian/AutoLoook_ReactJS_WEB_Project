@@ -208,6 +208,7 @@ const ItemDetails = () => {
                         <>
                             {/*<FileUpload*/}
                             {/*  fileType="new vehicle new photo"*/}
+                            {/*  folder="autoloook/Cars"*/}
                             {/*  setPhotoURL={(url) => setItem({ ...item, photoURL: url })}*/}
                             {/*  onUploadComplete={() => setIsUploadComplete(true)}*/}
                             {/*/>*/}

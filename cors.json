@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:5173"],
+    "origin": ["http://localhost:5173", "https://takvorgarabedian.github.io"],
     "method": ["GET", "POST", "HEAD", "PUT", "DELETE"],
     "responseHeader": ["Content-Type"],
     "maxAgeSeconds": 3600

@@ -153,6 +153,7 @@ const CreateItem = () => {
                       {!useDefaultPicture && (
                         <FileUpload
                           fileType="vehicle photo"
+                          folder="autoloook/Cars"
                           setPhotoURL={(url) => setItem({ ...item, photoURL: url })}
                           onUploadComplete={() => setIsUploadComplete(true)}
                         />
