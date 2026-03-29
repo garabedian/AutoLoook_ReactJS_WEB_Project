@@ -159,7 +159,7 @@ const CreateItem = () => {
                         />
                       )}
                       <Tooltip
-                        title={!isUploadComplete ? "First upload a picture file or select the default picture" : ""}>
+                        title={isUploadComplete ? "" : "First upload a picture file or select the default picture"}>
                             <span>
                                 <Button
                                   type="submit"

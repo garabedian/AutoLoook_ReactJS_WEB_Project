@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import './FileUpload.module.css';
 import { Button, Paper } from "@mui/material";
 import { UserContext } from '../contexts/UserContext.jsx';
@@ -176,5 +177,13 @@ function FileUpload({ fileType, folder = 'autoloook', setPhotoURL, onUploadCompl
         </div>
     );
 }
+
+FileUpload.propTypes = {
+    fileType: PropTypes.string.isRequired,
+    folder: PropTypes.string,
+    setPhotoURL: PropTypes.func.isRequired,
+    onUploadComplete: PropTypes.func.isRequired,
+    allowUnauthenticated: PropTypes.bool,
+};
 
 export default FileUpload;
